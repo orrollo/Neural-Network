@@ -16,6 +16,8 @@ namespace NeuralNetwork.NetworkModels
 		public double Value { get; set; }
 		#endregion
 
+	    protected IActivationFunction ActivationFunction;
+
 		#region -- Constructors --
 		public Neuron()
 		{
@@ -23,6 +25,7 @@ namespace NeuralNetwork.NetworkModels
 			InputSynapses = new List<Synapse>();
 			OutputSynapses = new List<Synapse>();
 			Bias = Network.GetRandom();
+            ActivationFunction = new Sigmoid();
 		}
 
 		public Neuron(IEnumerable<Neuron> inputNeurons) : this()
@@ -39,7 +42,7 @@ namespace NeuralNetwork.NetworkModels
 		#region -- Values & Weights --
 		public virtual double CalculateValue()
 		{
-			return Value = Sigmoid.Output(InputSynapses.Sum(a => a.Weight * a.InputNeuron.Value) + Bias);
+            return Value = ActivationFunction.Output(InputSynapses.Sum(a => a.Weight * a.InputNeuron.Value) + Bias);
 		}
 
 		public double CalculateError(double target)
@@ -50,9 +53,9 @@ namespace NeuralNetwork.NetworkModels
 		public double CalculateGradient(double? target = null)
 		{
 			if (target == null)
-				return Gradient = OutputSynapses.Sum(a => a.OutputNeuron.Gradient * a.Weight) * Sigmoid.Derivative(Value);
+				return Gradient = OutputSynapses.Sum(a => a.OutputNeuron.Gradient * a.Weight) * ActivationFunction.Derivative(Value);
 
-			return Gradient = CalculateError(target.Value) * Sigmoid.Derivative(Value);
+            return Gradient = CalculateError(target.Value) * ActivationFunction.Derivative(Value);
 		}
 
 		public void UpdateWeights(double learnRate, double momentum)
