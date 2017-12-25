@@ -13,7 +13,7 @@ namespace NeuralNetwork
 		private static int _numHiddenLayers;
 		private static int[] _hiddenNeurons;
 		private static int _numOutputParameters;
-		private static Network _network;
+		private static NetworkBackProp _network;
 		private static List<DataSet> _dataSets;
 		#endregion
 
@@ -155,7 +155,7 @@ namespace NeuralNetwork
 			if (_numInputParameters == 0) return false;
 
 			Console.WriteLine("\tCreating Network...");
-			_network = new Network(_numInputParameters, _hiddenNeurons, _numOutputParameters);
+			_network = new NetworkBackProp(_numInputParameters, _hiddenNeurons, _numOutputParameters);
 			Console.WriteLine("\t**Network Created!**");
 			PrintNewLine();
 			return true;
@@ -422,7 +422,7 @@ namespace NeuralNetwork
 		private static string GetLine()
 		{
 			var line = Console.ReadLine();
-			return line?.Trim() ?? string.Empty;
+			return (line ?? string.Empty).Trim();
 		}
 
 		private static int? GetInput(string message, int min, int max)

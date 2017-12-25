@@ -11,7 +11,7 @@ namespace NeuralNetwork.Tests
         [Test]
         public void XorTest()
         {
-            var nnet = new Network(2, new int[] {2}, 1);
+            var nnet = new NetworkBackProp(2, new int[] {2}, 1);
             var ds = BuildXorDataSets();
 
             nnet.Train(ds, 5000);

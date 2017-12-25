@@ -8,7 +8,7 @@ namespace NeuralNetwork.Helpers
 {
 	public static class ExportHelper
 	{
-		public static void ExportNetwork(Network network)
+		public static void ExportNetwork(NetworkBackProp network)
 		{
 			var dn = GetHelperNetwork(network);
 
@@ -48,7 +48,7 @@ namespace NeuralNetwork.Helpers
 			}
 		}
 
-		private static HelperNetwork GetHelperNetwork(Network network)
+		private static HelperNetwork GetHelperNetwork(NetworkBackProp network)
 		{
 			var hn = new HelperNetwork
 			{

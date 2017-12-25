@@ -10,12 +10,12 @@ namespace NeuralNetwork.Helpers
 {
 	public static class ImportHelper
 	{
-		public static Network ImportNetwork()
+		public static NetworkBackProp ImportNetwork()
 		{
 			var dn = GetHelperNetwork();
 			if (dn == null) return null;
 
-			var network = new Network();
+			var network = new NetworkBackProp();
 			var allNeurons = new List<Neuron>();
 
 			network.LearnRate = dn.LearnRate;

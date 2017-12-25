@@ -19,16 +19,23 @@ namespace NeuralNetwork.NetworkModels
 	    protected IActivationFunction ActivationFunction;
 
 		#region -- Constructors --
-		public Neuron()
-		{
+
+	    public Neuron() : this(null)
+	    {
+	        
+	    }
+        
+        public Neuron(Type activationFunctionType)
+        {
+            if (activationFunctionType == null) activationFunctionType = typeof (Sigmoid);
 			Id = Guid.NewGuid();
 			InputSynapses = new List<Synapse>();
 			OutputSynapses = new List<Synapse>();
 			Bias = Network.GetRandom();
-            ActivationFunction = new Sigmoid();
+            ActivationFunction = Activator.CreateInstance(activationFunctionType) as IActivationFunction;
 		}
 
-		public Neuron(IEnumerable<Neuron> inputNeurons) : this()
+        public Neuron(IEnumerable<Neuron> inputNeurons, Type activationFunctionType = null) : this(activationFunctionType)
 		{
 			foreach (var inputNeuron in inputNeurons)
 			{
@@ -73,4 +80,17 @@ namespace NeuralNetwork.NetworkModels
 		}
 		#endregion
 	}
+
+    public class GenericNeuron<T> : Neuron where T : IActivationFunction
+    {
+        public GenericNeuron() : base(typeof (T))
+        {
+            
+        }
+
+        public GenericNeuron(IEnumerable<Neuron> inputNeurons) : base(inputNeurons, typeof (T))
+        {
+            
+        }
+    }
 }
