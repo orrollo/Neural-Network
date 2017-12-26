@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.IO;
 using System.Linq;
-using NeuralNetwork.NetworkModels;
+using NeuralNetwork.Core.NetworkModels;
 using Newtonsoft.Json;
 
 namespace NeuralNetwork.Helpers

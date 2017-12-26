@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NeuralNetwork.NetworkModels
+namespace NeuralNetwork.Core.NetworkModels
 {
 	public class Synapse
 	{

@@ -39,12 +39,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActivationFunctions\ActivationNumeric.cs" />
+    <Compile Include="ActivationFunctions\IActivationFunction.cs" />
+    <Compile Include="ActivationFunctions\RationalSigmoid.cs" />
+    <Compile Include="ActivationFunctions\Tanh.cs" />
+    <Compile Include="TrainParams\BackPropTrainParams.cs" />
     <Compile Include="NetworkModels\Dataset.cs" />
     <Compile Include="NetworkModels\Network.cs" />
     <Compile Include="NetworkModels\NetworkBackProp.cs" />
     <Compile Include="NetworkModels\Neuron.cs" />
-    <Compile Include="NetworkModels\Sigmoid.cs" />
+    <Compile Include="ActivationFunctions\Sigmoid.cs" />
     <Compile Include="NetworkModels\Synapse.cs" />
+    <Compile Include="TrainParams\TrainingType.cs" />
+    <Compile Include="TrainParams\TrainParams.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

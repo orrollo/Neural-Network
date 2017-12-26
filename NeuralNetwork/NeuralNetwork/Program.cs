@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NeuralNetwork.Core.NetworkModels;
 using NeuralNetwork.Helpers;
-using NeuralNetwork.NetworkModels;
 
 namespace NeuralNetwork
 {
@@ -332,7 +332,7 @@ namespace NeuralNetwork
 					var minError = GetDouble("\tMinimum Error: ", 0.000000001, 1.0);
 					PrintNewLine();
 					Console.WriteLine("\tTraining...");
-					_network.Train(_dataSets, minError);
+					_network.TrainByError(_dataSets, minError);
 					Console.WriteLine("\t**Training Complete**");
 					PrintNewLine();
 					NetworkMenu();
@@ -347,7 +347,7 @@ namespace NeuralNetwork
 					}
 					PrintNewLine();
 					Console.WriteLine("\tTraining...");
-					_network.Train(_dataSets, maxEpoch.Value);
+					_network.TrainByEpochs(_dataSets, maxEpoch.Value);
 					Console.WriteLine("\t**Training Complete**");
 					PrintNewLine();
 					break;

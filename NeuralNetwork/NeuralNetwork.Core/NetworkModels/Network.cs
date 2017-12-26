@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NeuralNetwork.Core.ActivationFunctions;
 
-namespace NeuralNetwork.NetworkModels
+namespace NeuralNetwork.Core.NetworkModels
 {
 	public abstract class Network
 	{
@@ -83,7 +84,15 @@ namespace NeuralNetwork.NetworkModels
 			return OutputLayer.Select(a => a.Value).ToArray();
 		}
 
-	    #endregion
+        protected double CalculateError(params double[] targets)
+        {
+            var i = 0;
+            return OutputLayer.Sum(a => Math.Abs(a.CalculateError(targets[i++])));
+        }
+
+        public abstract void Train(List<DataSet> dataSets, TrainParams.TrainParams trainParams);
+        
+        #endregion
 
 		#region -- Helpers --
 		public static double GetRandom()
@@ -92,18 +101,9 @@ namespace NeuralNetwork.NetworkModels
 		}
 		#endregion
 
-	    protected double CalculateError(params double[] targets)
-	    {
-	        var i = 0;
-	        return OutputLayer.Sum(a => Math.Abs(a.CalculateError(targets[i++])));
-	    }
 	}
 
     #region -- Enum --
-	public enum TrainingType
-	{
-		Epoch,
-		MinimumError
-	}
-	#endregion
+
+    #endregion
 }

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NeuralNetwork.Core.ActivationFunctions;
 
-namespace NeuralNetwork.NetworkModels
+namespace NeuralNetwork.Core.NetworkModels
 {
 	public class Neuron
 	{
@@ -59,10 +60,21 @@ namespace NeuralNetwork.NetworkModels
 
 		public double CalculateGradient(double? target = null)
 		{
-			if (target == null)
-				return Gradient = OutputSynapses.Sum(a => a.OutputNeuron.Gradient * a.Weight) * ActivationFunction.Derivative(Value);
+            //if (target == null)
+            //    return Gradient = OutputSynapses.Sum(a => a.OutputNeuron.Gradient * a.Weight) * ActivationFunction.Derivative(Value);
 
-            return Gradient = CalculateError(target.Value) * ActivationFunction.Derivative(Value);
+            //return Gradient = CalculateError(target.Value) * ActivationFunction.Derivative(Value);
+		    //var fix = Value*(1 - Value);
+		    if (target != null)
+            {
+                Gradient = ActivationFunction.Derivative(Value)*CalculateError(target.Value);
+            }
+		    else
+            {
+                Gradient = ActivationFunction.Derivative(Value)*OutputSynapses.Sum(a => a.OutputNeuron.Gradient*a.Weight);
+            }
+
+		    return Gradient;
 		}
 
 		public void UpdateWeights(double learnRate, double momentum)

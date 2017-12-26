@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using NeuralNetwork.NetworkModels;
+using NeuralNetwork.Core.NetworkModels;
 
 namespace NeuralNetwork.Helpers
 {
