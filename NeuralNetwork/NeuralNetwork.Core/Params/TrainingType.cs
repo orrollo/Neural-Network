@@ -1,4 +1,4 @@
-﻿namespace NeuralNetwork.Core.TrainParams
+﻿namespace NeuralNetwork.Core.Params
 {
     public enum TrainingType
     {

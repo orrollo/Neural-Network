@@ -90,7 +90,7 @@ namespace NeuralNetwork.Core.NetworkModels
             return OutputLayer.Sum(a => Math.Abs(a.CalculateError(targets[i++])));
         }
 
-        public abstract void Train(List<DataSet> dataSets, TrainParams.TrainParams trainParams);
+        public abstract void Train(List<DataSet> dataSets, Params.TrainParams trainParams);
         
         #endregion
 

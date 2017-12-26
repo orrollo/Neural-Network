@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NeuralNetwork.Core.NetworkModels;
+using NeuralNetwork.Core.Params;
 using NeuralNetwork.Helpers;
 
 namespace NeuralNetwork
@@ -13,7 +14,7 @@ namespace NeuralNetwork
 		private static int _numHiddenLayers;
 		private static int[] _hiddenNeurons;
 		private static int _numOutputParameters;
-		private static NetworkBackProp _network;
+		private static Network _network;
 		private static List<DataSet> _dataSets;
 		#endregion
 
@@ -326,13 +327,15 @@ namespace NeuralNetwork
 			Console.WriteLine("\t2. Train to max epoch");
 			Console.WriteLine("\t3. Network Menu");
 			PrintNewLine();
+		    BackPropTrainParams trainParams = null;
 			switch (GetInput("\tYour Choice: ", 1, 3))
 			{
 				case 1:
 					var minError = GetDouble("\tMinimum Error: ", 0.000000001, 1.0);
 					PrintNewLine();
 					Console.WriteLine("\tTraining...");
-					_network.TrainByError(_dataSets, minError);
+                    trainParams = new BackPropTrainParams { Training = TrainingType.MinimumError, MinimumError = minError };
+					_network.Train(_dataSets, trainParams);
 					Console.WriteLine("\t**Training Complete**");
 					PrintNewLine();
 					NetworkMenu();
@@ -347,7 +350,8 @@ namespace NeuralNetwork
 					}
 					PrintNewLine();
 					Console.WriteLine("\tTraining...");
-					_network.TrainByEpochs(_dataSets, maxEpoch.Value);
+                    trainParams = new BackPropTrainParams { Training = TrainingType.Epoch, NumEpochs = maxEpoch.Value };
+					_network.Train(_dataSets, trainParams);
 					Console.WriteLine("\t**Training Complete**");
 					PrintNewLine();
 					break;

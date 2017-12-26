@@ -17,9 +17,9 @@ namespace NeuralNetwork.Core.ActivationFunctions
             while (true)
             {
                 double der2 = intDiff(x, h0/2);
-                double e1 = 16*Math.Abs(der1 - der2)/15.0;
+                double e2 = Math.Abs(der1 - der2)/15.0;
                 der1 = der2;
-                if (e1 < 1e-4) break;
+                if (e2 < 1e-4) break;
                 h0 = h0/2;
             }
             return der1;

@@ -52,8 +52,8 @@ namespace NeuralNetwork.Helpers
 		{
 			var hn = new HelperNetwork
 			{
-				LearnRate = network.LearnRate,
-				Momentum = network.Momentum
+                //LearnRate = network.LearnRate,
+                //Momentum = network.Momentum
 			};
 
 			//Input Layer

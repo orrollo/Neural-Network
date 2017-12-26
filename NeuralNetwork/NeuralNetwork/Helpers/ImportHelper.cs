@@ -18,8 +18,8 @@ namespace NeuralNetwork.Helpers
 			var network = new NetworkBackProp();
 			var allNeurons = new List<Neuron>();
 
-			network.LearnRate = dn.LearnRate;
-			network.Momentum = dn.Momentum;
+			//network.LearnRate = dn.LearnRate;
+			//network.Momentum = dn.Momentum;
 
 			//Input Layer
 			foreach (var n in dn.InputLayer)

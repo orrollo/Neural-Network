@@ -1,64 +1,57 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NeuralNetwork.Core.TrainParams;
+using System.Threading.Tasks;
+using NeuralNetwork.Core.Params;
 
 namespace NeuralNetwork.Core.NetworkModels
 {
     public class NetworkBackProp : Network
     {
-        public double LearnRate { get; set; }
-        public double Momentum { get; set; }
-
         public NetworkBackProp(Type hiddenActivationType = null, Type outputActivationType = null)
             : base(hiddenActivationType, outputActivationType)
         {
-            LearnRate = 0;
-            Momentum = 0;
         }
 
-        public NetworkBackProp(int inputSize, int[] hiddenSizes, int outputSize, double? learnRate = null, double? momentum = null,
-            Type hiddenActivationType = null, Type outputActivationType = null) : base(inputSize, hiddenSizes, outputSize, hiddenActivationType, outputActivationType)
+        public NetworkBackProp(int inputSize, int[] hiddenSizes, int outputSize, Type hiddenActivationType = null, Type outputActivationType = null) 
+            : base(inputSize, hiddenSizes, outputSize, hiddenActivationType, outputActivationType)
         {
-            LearnRate = learnRate ?? .4;
-            Momentum = momentum ?? .9;
         }
 
-        public override void Train(List<DataSet> dataSets, TrainParams.TrainParams trainParams)
+        public override void Train(List<DataSet> dataSets, TrainParams trainParams)
         {
             var bpParams = trainParams as BackPropTrainParams;
             if (bpParams == null) throw new ArgumentException("params must be <BackPropTrainParams> object");
             if (bpParams.Training == TrainingType.Epoch) 
-                bpParams.ResultEpochs = TrainByEpochs(dataSets, bpParams.NumEpochs);
+                TrainByEpochs(dataSets, bpParams);
             else if (bpParams.Training == TrainingType.MinimumError)
-                bpParams.ResultEpochs = TrainByError(dataSets, bpParams.MinimumError);
+                TrainByError(dataSets, bpParams);
             else
                 throw new ArgumentException("unknown training type");
         }
 
-        public int TrainByEpochs(List<DataSet> dataSets, int numEpochs)
+        public void TrainByEpochs(List<DataSet> dataSets, BackPropTrainParams bpp)
         {
-            for (var i = 0; i < numEpochs; i++)
+            for (var i = 0; i < bpp.NumEpochs; i++)
             {
                 foreach (var dataSet in dataSets)
                 {
                     ForwardPropagate(dataSet.Values);
-                    BackPropagate(dataSet.Targets);
+                    BackPropagate(bpp, dataSet.Targets);
                 }
             }
-            return numEpochs;
+            bpp.ResultEpochs = bpp.NumEpochs;
         }
 
-        public int TrainByError(List<DataSet> dataSets, double minimumError)
+        public void TrainByError(List<DataSet> dataSets, BackPropTrainParams bpp)
         {
             var error = 1.0;
             var numEpochs = 0;
             var rnd = new Random();
             var src = new List<DataSet>(dataSets);
 
-            //var errors = new List<double>();
             var count = src.Count;
-            while (error > minimumError && numEpochs < int.MaxValue)
+            while (error > bpp.MinimumError && numEpochs < int.MaxValue)
             {
                 if ((numEpochs % count) == 0)
                 {
@@ -74,29 +67,54 @@ namespace NeuralNetwork.Core.NetworkModels
                 foreach (var dataSet in src)
                 {
                     ForwardPropagate(dataSet.Values);
-                    BackPropagate(dataSet.Targets);
+                    BackPropagate(bpp, dataSet.Targets);
                 }
-                error = 0.0;
-                foreach (var dataSet in src)
-                {
-                    ForwardPropagate(dataSet.Values);
-                    error += CalculateError(dataSet.Targets);
-                }
-                error /= count;
+                error = CalcErrorForData(src);
                 numEpochs++;
             }
-            return numEpochs;
+            bpp.ResultEpochs = numEpochs;
         }
 
-        private void BackPropagate(params double[] targets)
+        private double CalcErrorForData(List<DataSet> src)
+        {
+            var error = 0.0;
+            foreach (var dataSet in src)
+            {
+                ForwardPropagate(dataSet.Values);
+                error += CalculateError(dataSet.Targets);
+            }
+            error /= src.Count;
+            return error;
+        }
+
+        private void BackPropagate(BackPropTrainParams bpp, params double[] targets)
         {
             var i = 0;
+            double learnRate = bpp.LearnRate, momentum = bpp.Momentum;
+
             OutputLayer.ForEach(a => a.CalculateGradient(targets[i++]));
+            
             HiddenLayers.Reverse();
-            HiddenLayers.ForEach(a => a.ForEach(b => b.CalculateGradient()));
-            HiddenLayers.ForEach(a => a.ForEach(b => b.UpdateWeights(LearnRate, Momentum)));
+            if (bpp.UseMultiThreading)
+            {
+                HiddenLayers.ForEach(a => Parallel.ForEach(a, bpp.ParallelOptionsOptions, b => b.CalculateGradient()));
+                HiddenLayers.ForEach(a => Parallel.ForEach(a, bpp.ParallelOptionsOptions, b => b.UpdateWeights(learnRate, momentum)));
+            }
+            else
+            {
+                HiddenLayers.ForEach(a => a.ForEach(b => b.CalculateGradient()));
+                HiddenLayers.ForEach(a => a.ForEach(b => b.UpdateWeights(learnRate, momentum)));
+            }
             HiddenLayers.Reverse();
-            OutputLayer.ForEach(a => a.UpdateWeights(LearnRate, Momentum));
+
+            if (bpp.UseMultiThreading)
+            {
+                Parallel.ForEach(OutputLayer, bpp.ParallelOptionsOptions, a => a.UpdateWeights(learnRate, momentum));
+            }
+            else
+            {
+                OutputLayer.ForEach(a => a.UpdateWeights(learnRate, momentum));
+            }
         }
     }
 }

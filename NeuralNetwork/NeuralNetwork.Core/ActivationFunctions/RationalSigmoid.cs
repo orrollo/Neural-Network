@@ -17,7 +17,7 @@ namespace NeuralNetwork.Core.ActivationFunctions
             var x1 = 0.05/(1/y0 - 1);
             var x2 = 0.05/(1/y0 + 1);
             return y0 > 0 ? x1 : x2;
-            return base.OutputSolve(y);
+            //return base.OutputSolve(y);
         }
     }
 }
