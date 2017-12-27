@@ -41,6 +41,15 @@ namespace NeuralNetwork.Tests
             CheckResults(nnet, 0.15);
         }
 
+        [Test]
+        public void RPropSigmoidXorTest()
+        {
+            var nnet = new NetworkRProp(2, new int[] { 2 }, 1, typeof(Sigmoid), typeof(Sigmoid));
+            var trainParams = new RPropTrainParams() { NumEpochs = 500 };
+            nnet.Train(BuildXorDataSets(), trainParams);
+            CheckResults(nnet, 0.15);
+        }
+
         private static double ErrorResult(Network nnet, double result, params double[] input)
         {
             var value = nnet.Compute(input)[0];
