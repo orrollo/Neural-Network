@@ -12,7 +12,7 @@ namespace NeuralNetwork.Core.NetworkModels
 		public List<Synapse> InputSynapses { get; set; }
 		public List<Synapse> OutputSynapses { get; set; }
 		public double Bias { get; set; }
-		public double BiasDelta { get; set; }
+		//public double BiasDelta { get; set; }
 		public double Gradient { get; set; }
 		public double Value { get; set; }
 		#endregion
@@ -32,11 +32,16 @@ namespace NeuralNetwork.Core.NetworkModels
 			Id = Guid.NewGuid();
 			InputSynapses = new List<Synapse>();
 			OutputSynapses = new List<Synapse>();
-			Bias = Network.GetRandom();
+			Initialization();
             ActivationFunction = Activator.CreateInstance(activationFunctionType) as IActivationFunction;
 		}
 
-        public Neuron(IEnumerable<Neuron> inputNeurons, Type activationFunctionType = null) : this(activationFunctionType)
+	    public void Initialization()
+	    {
+	        Bias = Network.GetRandom();
+	    }
+
+	    public Neuron(IEnumerable<Neuron> inputNeurons, Type activationFunctionType = null) : this(activationFunctionType)
 		{
 			foreach (var inputNeuron in inputNeurons)
 			{
@@ -60,37 +65,38 @@ namespace NeuralNetwork.Core.NetworkModels
 
 		public double CalculateGradient(double? target = null)
 		{
-            //if (target == null)
-            //    return Gradient = OutputSynapses.Sum(a => a.OutputNeuron.Gradient * a.Weight) * ActivationFunction.Derivative(Value);
-
-            //return Gradient = CalculateError(target.Value) * ActivationFunction.Derivative(Value);
-		    //var fix = Value*(1 - Value);
 		    if (target != null)
             {
                 Gradient = ActivationFunction.Derivative(Value)*CalculateError(target.Value);
             }
 		    else
             {
-                Gradient = ActivationFunction.Derivative(Value)*OutputSynapses.Sum(a => a.OutputNeuron.Gradient*a.Weight);
+                Gradient = ActivationFunction.Derivative(Value)*OutputSynapses.Sum(synapse => synapse.OutputNeuron.Gradient*synapse.Weight);
             }
 
 		    return Gradient;
 		}
 
-		public void UpdateWeights(double learnRate, double momentum)
-		{
-			var prevDelta = BiasDelta;
-			BiasDelta = learnRate * Gradient;
-			Bias += BiasDelta + momentum * prevDelta;
+        //public void UpdateWeights(double learnRate, double momentum)
+        //{
+        //    var prevDelta = BiasDelta;
+        //    BiasDelta = learnRate * Gradient;
+        //    Bias += BiasDelta + momentum * prevDelta;
 
-			foreach (var synapse in InputSynapses)
-			{
-				prevDelta = synapse.WeightDelta;
-				synapse.WeightDelta = learnRate * Gradient * synapse.InputNeuron.Value;
-				synapse.Weight += synapse.WeightDelta + momentum * prevDelta;
-			}
-		}
+        //    foreach (var synapse in InputSynapses)
+        //    {
+        //        prevDelta = synapse.WeightDelta;
+        //        synapse.WeightDelta = learnRate * Gradient * synapse.InputNeuron.Value;
+        //        synapse.Weight += synapse.WeightDelta + momentum * prevDelta;
+        //    }
+        //}
 		#endregion
+
+	    public void ResetNeuron()
+	    {
+	        Initialization();
+	        InputSynapses.ForEach(synapse => synapse.Initialization());
+	    }
 	}
 
     public class GenericNeuron<T> : Neuron where T : IActivationFunction

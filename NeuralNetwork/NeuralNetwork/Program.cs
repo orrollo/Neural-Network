@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NeuralNetwork.Core.Learning;
 using NeuralNetwork.Core.NetworkModels;
 using NeuralNetwork.Core.Params;
 using NeuralNetwork.Helpers;
@@ -156,7 +157,7 @@ namespace NeuralNetwork
 			if (_numInputParameters == 0) return false;
 
 			Console.WriteLine("\tCreating Network...");
-			_network = new NetworkBackProp(_numInputParameters, _hiddenNeurons, _numOutputParameters);
+			_network = new Network(_numInputParameters, _hiddenNeurons, _numOutputParameters);
 			Console.WriteLine("\t**Network Created!**");
 			PrintNewLine();
 			return true;
@@ -327,15 +328,18 @@ namespace NeuralNetwork
 			Console.WriteLine("\t2. Train to max epoch");
 			Console.WriteLine("\t3. Network Menu");
 			PrintNewLine();
-		    BackPropTrainParams trainParams = null;
+		    //BackPropTrainParams trainParams = null;
+		    BackPropLearning learning = null;
 			switch (GetInput("\tYour Choice: ", 1, 3))
 			{
 				case 1:
 					var minError = GetDouble("\tMinimum Error: ", 0.000000001, 1.0);
 					PrintNewLine();
 					Console.WriteLine("\tTraining...");
-                    trainParams = new BackPropTrainParams { Training = TrainingType.MinimumError, MinimumError = minError };
-					_network.Train(_dataSets, trainParams);
+                    //trainParams = new BackPropTrainParams { Training = TrainingType.MinimumError, MinimumError = minError };
+                    learning = new BackPropLearning(_network) { MinimumError = minError };
+                    learning.TrainByError(_dataSets);
+					//_network.Train(_dataSets, trainParams);
 					Console.WriteLine("\t**Training Complete**");
 					PrintNewLine();
 					NetworkMenu();
@@ -350,8 +354,8 @@ namespace NeuralNetwork
 					}
 					PrintNewLine();
 					Console.WriteLine("\tTraining...");
-                    trainParams = new BackPropTrainParams { Training = TrainingType.Epoch, NumEpochs = maxEpoch.Value };
-					_network.Train(_dataSets, trainParams);
+                    learning = new BackPropLearning(_network) { NumEpochs = maxEpoch.Value };
+                    learning.TrainByEpochs(_dataSets);
 					Console.WriteLine("\t**Training Complete**");
 					PrintNewLine();
 					break;

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using NeuralNetwork.Core.ActivationFunctions;
+using NeuralNetwork.Core.Learning;
 using NeuralNetwork.Core.NetworkModels;
-using NeuralNetwork.Core.Params;
 using NUnit.Framework;
 
 namespace NeuralNetwork.Tests
@@ -14,41 +14,56 @@ namespace NeuralNetwork.Tests
         [Test]
         public void BackPropSigmoidXorTest()
         {
-            var nnet = new NetworkBackProp(2, new int[] { 2 }, 1, typeof(Sigmoid), typeof(Sigmoid));
-            var trainParams = new BackPropTrainParams { Training = TrainingType.MinimumError, MinimumError = 0.1, Momentum = 0.5, LearnRate = 0.1 };
-            nnet.Train(BuildXorDataSets(), trainParams);
-            System.Diagnostics.Debug.WriteLine("trained in {0} epochs", trainParams.ResultEpochs);
+            var nnet = new Network(2, new int[] { 2 }, 1, typeof(Sigmoid), typeof(Sigmoid));
+            var learning = new BackPropLearning(nnet)
+            {
+                MinimumError = 0.1,
+                Momentum = 0.5,
+                LearnRate = 0.1
+            };
+            learning.TrainByError(BuildXorDataSets(), 20000);
+            System.Diagnostics.Debug.WriteLine("trained in {0} epochs", learning.ResultEpochs);
             CheckResults(nnet, 0.15);
         }
 
         [Test]
         public void BackPropTanhXorTest()
         {
-            var nnet = new NetworkBackProp(2, new int[] { 2 }, 1, typeof(Tanh), typeof(Tanh));
-            var trainParams = new BackPropTrainParams { Training = TrainingType.MinimumError, MinimumError = 0.1, Momentum = 0.5, LearnRate = 0.1 };
-            nnet.Train(BuildXorDataSets(), trainParams);
-            System.Diagnostics.Debug.WriteLine("trained in {0} epochs", trainParams.ResultEpochs);
+            var nnet = new Network(2, new int[] { 2 }, 1, typeof(Tanh), typeof(Tanh));
+            var learning = new BackPropLearning(nnet)
+            {
+                MinimumError = 0.1,
+                Momentum = 0.5,
+                LearnRate = 0.1
+            };
+            learning.TrainByError(BuildXorDataSets(), 20000);
+            System.Diagnostics.Debug.WriteLine("trained in {0} epochs", learning.ResultEpochs);
             CheckResults(nnet, 0.15);
         }
 
         [Test]
         public void BackPropRationalSigmoidXorTest()
         {
-            var nnet = new NetworkBackProp(2, new int[] { 2 }, 1, typeof(RationalSigmoid), typeof(RationalSigmoid));
-            var trainParams = new BackPropTrainParams { Training = TrainingType.MinimumError, MinimumError = 0.1, Momentum = 0.5, LearnRate = 0.1 };
-            nnet.Train(BuildXorDataSets(), trainParams);
-            System.Diagnostics.Debug.WriteLine("trained in {0} epochs", trainParams.ResultEpochs);
+            var nnet = new Network(2, new int[] { 2 }, 1, typeof(RationalSigmoid), typeof(RationalSigmoid));
+            var learning = new BackPropLearning(nnet)
+            {
+                MinimumError = 0.1,
+                Momentum = 0.5,
+                LearnRate = 0.1
+            };
+            learning.TrainByError(BuildXorDataSets(), 20000);
+            System.Diagnostics.Debug.WriteLine("trained in {0} epochs", learning.ResultEpochs);
             CheckResults(nnet, 0.15);
         }
 
-        [Test]
-        public void RPropSigmoidXorTest()
-        {
-            var nnet = new NetworkRProp(2, new int[] { 2 }, 1, typeof(Sigmoid), typeof(Sigmoid));
-            var trainParams = new RPropTrainParams() { NumEpochs = 500 };
-            nnet.Train(BuildXorDataSets(), trainParams);
-            CheckResults(nnet, 0.15);
-        }
+        //[Test]
+        //public void RPropSigmoidXorTest()
+        //{
+        //    var nnet = new NetworkRProp(2, new int[] { 2 }, 1, typeof(Sigmoid), typeof(Sigmoid));
+        //    var trainParams = new RPropTrainParams() { NumEpochs = 500 };
+        //    nnet.Train(BuildXorDataSets(), trainParams);
+        //    CheckResults(nnet, 0.15);
+        //}
 
         private static double ErrorResult(Network nnet, double result, params double[] input)
         {

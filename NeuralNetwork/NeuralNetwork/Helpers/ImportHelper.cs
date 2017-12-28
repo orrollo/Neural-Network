@@ -10,12 +10,12 @@ namespace NeuralNetwork.Helpers
 {
 	public static class ImportHelper
 	{
-		public static NetworkBackProp ImportNetwork()
+		public static Network ImportNetwork()
 		{
 			var dn = GetHelperNetwork();
 			if (dn == null) return null;
 
-			var network = new NetworkBackProp();
+			var network = new Network();
 			var allNeurons = new List<Neuron>();
 
 			//network.LearnRate = dn.LearnRate;
@@ -28,7 +28,7 @@ namespace NeuralNetwork.Helpers
 				{
 					Id = n.Id,
 					Bias = n.Bias,
-					BiasDelta = n.BiasDelta,
+					//BiasDelta = n.BiasDelta,
 					Gradient = n.Gradient,
 					Value = n.Value
 				};
@@ -47,7 +47,7 @@ namespace NeuralNetwork.Helpers
 					{
 						Id = n.Id,
 						Bias = n.Bias,
-						BiasDelta = n.BiasDelta,
+						//BiasDelta = n.BiasDelta,
 						Gradient = n.Gradient,
 						Value = n.Value
 					};
@@ -66,7 +66,7 @@ namespace NeuralNetwork.Helpers
 				{
 					Id = n.Id,
 					Bias = n.Bias,
-					BiasDelta = n.BiasDelta,
+					//BiasDelta = n.BiasDelta,
 					Gradient = n.Gradient,
 					Value = n.Value
 				};
@@ -84,7 +84,7 @@ namespace NeuralNetwork.Helpers
 				synapse.InputNeuron = inputNeuron;
 				synapse.OutputNeuron = outputNeuron;
 				synapse.Weight = syn.Weight;
-				synapse.WeightDelta = syn.WeightDelta;
+				//synapse.WeightDelta = syn.WeightDelta;
 
 				inputNeuron.OutputSynapses.Add(synapse);
 				outputNeuron.InputSynapses.Add(synapse);

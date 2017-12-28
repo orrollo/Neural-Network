@@ -8,7 +8,7 @@ namespace NeuralNetwork.Helpers
 {
 	public static class ExportHelper
 	{
-		public static void ExportNetwork(NetworkBackProp network)
+		public static void ExportNetwork(Network network)
 		{
 			var dn = GetHelperNetwork(network);
 
@@ -48,7 +48,7 @@ namespace NeuralNetwork.Helpers
 			}
 		}
 
-		private static HelperNetwork GetHelperNetwork(NetworkBackProp network)
+		private static HelperNetwork GetHelperNetwork(Network network)
 		{
 			var hn = new HelperNetwork
 			{
@@ -63,7 +63,7 @@ namespace NeuralNetwork.Helpers
 				{
 					Id = n.Id,
 					Bias = n.Bias,
-					BiasDelta = n.BiasDelta,
+					//BiasDelta = n.BiasDelta,
 					Gradient = n.Gradient,
 					Value = n.Value
 				};
@@ -77,8 +77,8 @@ namespace NeuralNetwork.Helpers
 						Id = synapse.Id,
 						OutputNeuronId = synapse.OutputNeuron.Id,
 						InputNeuronId = synapse.InputNeuron.Id,
-						Weight = synapse.Weight,
-						WeightDelta = synapse.WeightDelta
+						Weight = synapse.Weight//,
+						//WeightDelta = synapse.WeightDelta
 					};
 
 					hn.Synapses.Add(syn);
@@ -96,7 +96,7 @@ namespace NeuralNetwork.Helpers
 					{
 						Id = n.Id,
 						Bias = n.Bias,
-						BiasDelta = n.BiasDelta,
+						//BiasDelta = n.BiasDelta,
 						Gradient = n.Gradient,
 						Value = n.Value
 					};
@@ -110,8 +110,8 @@ namespace NeuralNetwork.Helpers
 							Id = synapse.Id,
 							OutputNeuronId = synapse.OutputNeuron.Id,
 							InputNeuronId = synapse.InputNeuron.Id,
-							Weight = synapse.Weight,
-							WeightDelta = synapse.WeightDelta
+							Weight = synapse.Weight//,
+							//WeightDelta = synapse.WeightDelta
 						};
 
 						hn.Synapses.Add(syn);
@@ -128,7 +128,7 @@ namespace NeuralNetwork.Helpers
 				{
 					Id = n.Id,
 					Bias = n.Bias,
-					BiasDelta = n.BiasDelta,
+					//BiasDelta = n.BiasDelta,
 					Gradient = n.Gradient,
 					Value = n.Value
 				};
@@ -142,8 +142,8 @@ namespace NeuralNetwork.Helpers
 						Id = synapse.Id,
 						OutputNeuronId = synapse.OutputNeuron.Id,
 						InputNeuronId = synapse.InputNeuron.Id,
-						Weight = synapse.Weight,
-						WeightDelta = synapse.WeightDelta
+						Weight = synapse.Weight//,
+						//WeightDelta = synapse.WeightDelta
 					};
 
 					hn.Synapses.Add(syn);

@@ -5,7 +5,7 @@ using NeuralNetwork.Core.ActivationFunctions;
 
 namespace NeuralNetwork.Core.NetworkModels
 {
-	public abstract class Network
+	public class Network
 	{
 		#region -- Properties --
 
@@ -23,7 +23,7 @@ namespace NeuralNetwork.Core.NetworkModels
 
 		#region -- Constructor --
 
-	    protected Network(Type hiddenActivationType = null, Type outputActivationType = null)
+	    public Network(Type hiddenActivationType = null, Type outputActivationType = null)
 	    {
 	        HiddenActivationType = hiddenActivationType ?? typeof (Sigmoid);
 	        OutputActivationType = outputActivationType ?? typeof (Sigmoid);
@@ -37,10 +37,16 @@ namespace NeuralNetwork.Core.NetworkModels
 	        OutputLayer = new List<Neuron>();
 	    }
 
-        protected Network(int inputSize, int[] hiddenSizes, int outputSize, Type hiddenActivationType = null, Type outputActivationType = null)
+        public Network(int inputSize, int[] hiddenSizes, int outputSize, Type hiddenActivationType = null, Type outputActivationType = null)
             : this(hiddenActivationType, outputActivationType)
 	    {
 	        CreateNeurons(inputSize, hiddenSizes, outputSize);
+	    }
+
+	    public virtual void ResetNetwork()
+	    {
+	        OutputLayer.ForEach(neuron => neuron.ResetNeuron());
+	        HiddenLayers.ForEach(layer => layer.ForEach(neuron => neuron.ResetNeuron()));
 	    }
 
         protected void CreateNeurons(int inputSize, int[] hiddenSizes, int outputSize) 
@@ -70,7 +76,7 @@ namespace NeuralNetwork.Core.NetworkModels
 
 		#region -- Training --
 
-	    protected void ForwardPropagate(params double[] inputs)
+	    public void ForwardPropagate(params double[] inputs)
 		{
 			var i = 0;
 			InputLayer.ForEach(a => a.Value = inputs[i++]);
@@ -84,13 +90,13 @@ namespace NeuralNetwork.Core.NetworkModels
 			return OutputLayer.Select(a => a.Value).ToArray();
 		}
 
-        protected double CalculateError(params double[] targets)
+        public double CalculateError(params double[] targets)
         {
             var i = 0;
             return OutputLayer.Sum(a => Math.Abs(a.CalculateError(targets[i++])));
         }
 
-        public abstract void Train(List<DataSet> dataSets, Params.TrainParams trainParams);
+        //public abstract void Train(List<DataSet> dataSets, Params.TrainParams trainParams);
         
         #endregion
 

@@ -9,7 +9,7 @@ namespace NeuralNetwork.Core.NetworkModels
 		public Neuron InputNeuron { get; set; }
 		public Neuron OutputNeuron { get; set; }
 		public double Weight { get; set; }
-		public double WeightDelta { get; set; }
+		//public double WeightDelta { get; set; }
 		#endregion
 
 		#region -- Constructor --
@@ -20,8 +20,14 @@ namespace NeuralNetwork.Core.NetworkModels
 			Id = Guid.NewGuid();
 			InputNeuron = inputNeuron;
 			OutputNeuron = outputNeuron;
-			Weight = Network.GetRandom();
+			Initialization();
 		}
-		#endregion
+
+	    public void Initialization()
+	    {
+	        Weight = Network.GetRandom();
+	    }
+
+	    #endregion
 	}
 }

@@ -43,6 +43,9 @@
     <Compile Include="ActivationFunctions\IActivationFunction.cs" />
     <Compile Include="ActivationFunctions\RationalSigmoid.cs" />
     <Compile Include="ActivationFunctions\Tanh.cs" />
+    <Compile Include="Learning\BackPropLearning.cs" />
+    <Compile Include="Learning\BaseLearning.cs" />
+    <Compile Include="NetworkModels\NetworkRProp.cs" />
     <Compile Include="Params\BackPropTrainParams.cs" />
     <Compile Include="NetworkModels\Dataset.cs" />
     <Compile Include="NetworkModels\Network.cs" />
@@ -50,6 +53,7 @@
     <Compile Include="NetworkModels\Neuron.cs" />
     <Compile Include="ActivationFunctions\Sigmoid.cs" />
     <Compile Include="NetworkModels\Synapse.cs" />
+    <Compile Include="Params\RPropTrainParams.cs" />
     <Compile Include="Params\TrainingType.cs" />
     <Compile Include="Params\TrainParams.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

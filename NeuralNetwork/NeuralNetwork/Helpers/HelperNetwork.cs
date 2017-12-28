@@ -25,7 +25,7 @@ namespace NeuralNetwork.Helpers
 	{
 		public Guid Id { get; set; }
 		public double Bias { get; set; }
-		public double BiasDelta { get; set; }
+		//public double BiasDelta { get; set; }
 		public double Gradient { get; set; }
 		public double Value { get; set; }
 	}
@@ -36,6 +36,6 @@ namespace NeuralNetwork.Helpers
 		public Guid OutputNeuronId { get; set; }
 		public Guid InputNeuronId { get; set; }
 		public double Weight { get; set; }
-		public double WeightDelta { get; set; }
+		//public double WeightDelta { get; set; }
 	}
 }
