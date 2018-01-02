@@ -6,31 +6,31 @@ namespace NeuralNetwork.Core.ActivationFunctions
     {
         public virtual double Derivative(double y)
         {
-            var x = OutputSolve(y);
-            return adaptDiff(x);
+            var x = Reverse(y);
+            return AdaptiveDiff(x);
         }
 
-        private double adaptDiff(double x)
+        private double AdaptiveDiff(double x)
         {
             var h0 = 0.5;
-            double der1 = intDiff(x, h0);
+            double der1 = FivePointDiff(x, h0);
             while (true)
             {
-                double der2 = intDiff(x, h0/2);
-                double e2 = Math.Abs(der1 - der2)/15.0;
+                double der2 = FivePointDiff(x, h0/2);
+                double diffError = Math.Abs(der1 - der2)/15.0;
                 der1 = der2;
-                if (e2 < 1e-4) break;
+                if (diffError < 1e-4) break;
                 h0 = h0/2;
             }
             return der1;
         }
 
-        private double intDiff(double x, double h)
+        private double FivePointDiff(double x, double h)
         {
             return (Output(x - 2*h) - 8*Output(x - h) + 8*Output(x + h) - Output(x + 2*h))/(12*h);
         }
 
-        protected virtual double OutputSolve(double y)
+        protected virtual double Reverse(double y)
 
         {
             double left = -0.5, right = 0.5;

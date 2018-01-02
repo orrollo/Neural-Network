@@ -55,23 +55,25 @@ namespace NeuralNetwork.Core.NetworkModels
 		#region -- Values & Weights --
 		public virtual double CalculateValue()
 		{
-            return Value = ActivationFunction.Output(InputSynapses.Sum(a => a.Weight * a.InputNeuron.Value) + Bias);
+		    var inputSignals = InputSynapses.Sum(a => a.Weight * a.InputNeuron.Value);
+		    return Value = ActivationFunction.Output(inputSignals + Bias);
 		}
 
-		public double CalculateError(double target)
+	    public double CalculateError(double target)
 		{
 			return target - Value;
 		}
 
 		public double CalculateGradient(double? target = null)
 		{
+		    var derivative = ActivationFunction.Derivative(Value);
 		    if (target != null)
             {
-                Gradient = ActivationFunction.Derivative(Value)*CalculateError(target.Value);
+                Gradient = derivative*CalculateError(target.Value);
             }
 		    else
             {
-                Gradient = ActivationFunction.Derivative(Value)*OutputSynapses.Sum(synapse => synapse.OutputNeuron.Gradient*synapse.Weight);
+                Gradient = derivative*OutputSynapses.Sum(synapse => synapse.OutputNeuron.Gradient*synapse.Weight);
             }
 
 		    return Gradient;
