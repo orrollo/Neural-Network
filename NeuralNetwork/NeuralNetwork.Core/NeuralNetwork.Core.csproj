@@ -45,6 +45,7 @@
     <Compile Include="ActivationFunctions\Tanh.cs" />
     <Compile Include="Learning\BackPropLearning.cs" />
     <Compile Include="Learning\BaseLearning.cs" />
+    <Compile Include="Learning\RPropLearning.cs" />
     <Compile Include="NetworkModels\NetworkRProp.cs" />
     <Compile Include="Params\BackPropTrainParams.cs" />
     <Compile Include="NetworkModels\Dataset.cs" />

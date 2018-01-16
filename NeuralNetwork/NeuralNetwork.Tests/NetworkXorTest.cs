@@ -27,6 +27,14 @@ namespace NeuralNetwork.Tests
         }
 
         [Test]
+        public void RPropSigmoidXorTest()
+        {
+            var nnet = new Network(2, new int[] { 2 }, 1, typeof(Sigmoid), typeof(Sigmoid));
+            var learning = new RPropLearning(nnet);
+            learning.Train(BuildXorDataSets());
+        }
+
+        [Test]
         public void BackPropTanhXorTest()
         {
             var nnet = new Network(2, new int[] { 2 }, 1, typeof(Tanh), typeof(Tanh));

@@ -29,9 +29,11 @@ namespace NeuralNetwork.Core.Learning
 
         public void TrainByEpochs(List<DataSet> dataSets)
         {
+            var src = new List<DataSet>(dataSets); 
             for (var i = 0; i < NumEpochs; i++)
             {
-                foreach (var dataSet in dataSets)
+                ShuffleData(src);
+                foreach (var dataSet in src)
                 {
                     Net.ForwardPropagate(dataSet.Values);
                     BackPropagate(dataSet.Targets);
@@ -44,24 +46,13 @@ namespace NeuralNetwork.Core.Learning
         {
             var error = 1.0;
             var numEpochs = 0;
-            var rnd = new Random();
             var src = new List<DataSet>(dataSets);
 
             var count = src.Count;
             while (error > MinimumError && numEpochs < int.MaxValue)
             {
                 if (resetEpochsNumber != -1 && numEpochs % resetEpochsNumber == 0) ResetLearning();
-                if ((numEpochs % count) == 0)
-                {
-                    for (int i = 0; i < src.Count; i++)
-                    {
-                        int j = rnd.Next(src.Count);
-                        if (i == j) continue;
-                        var set = src[i];
-                        src[i] = src[j];
-                        src[j] = set;
-                    }
-                }
+                if ((numEpochs % count) == 0) ShuffleData(src);
                 foreach (var dataSet in src)
                 {
                     Net.ForwardPropagate(dataSet.Values);
